@@ -1,0 +1,60 @@
+# PIReel - Dépendances Python du pipeline de génération vidéo IA
+# Compatible Python 3.10 | CUDA 12.4 | NVIDIA L4
+
+# ── Framework IA ──────────────────────────────────────────────────────────────
+torch==2.3.0
+torchvision==0.18.0
+torchaudio==2.3.0
+--extra-index-url https://download.pytorch.org/whl/cu124
+
+# ── Accélération GPU (TensorRT - accélérateur x5) ─────────────────────────────
+tensorrt==10.0.1
+tensorrt-cu12==10.0.1
+pycuda==2024.1
+cuda-python==12.4.0
+
+# ── Optimisation mémoire VRAM ──────────────────────────────────────────────────
+xformers==0.0.26.post1
+triton==2.3.0
+flash-attn==2.5.8
+
+# ── ComfyUI et gestionnaires de modèles ───────────────────────────────────────
+safetensors==0.4.3
+diffusers==0.27.2
+transformers==4.40.2
+accelerate==0.30.1
+compel==2.0.2
+
+# ── Traitement vidéo et image ──────────────────────────────────────────────────
+opencv-python==4.9.0.80
+Pillow==10.3.0
+imageio==2.34.1
+imageio-ffmpeg==0.5.1
+moviepy==1.0.3
+
+# ── Audio (Bark TTS + RVC Voice Clone) ───────────────────────────────────────
+bark==0.1.5
+soundfile==0.12.1
+librosa==0.10.2
+pyworld==0.3.4
+faiss-gpu==1.7.3
+
+# ── Base de données (Supabase) ────────────────────────────────────────────────
+supabase==2.4.6
+postgrest==0.16.6
+gotrue==2.4.2
+
+# ── Google Cloud ──────────────────────────────────────────────────────────────
+google-cloud-storage==2.16.0
+google-cloud-aiplatform==1.51.0
+google-auth==2.29.0
+
+# ── Utilitaires ───────────────────────────────────────────────────────────────
+numpy==1.26.4
+scipy==1.13.0
+einops==0.7.0
+omegaconf==2.3.0
+tqdm==4.66.2
+requests==2.31.0
+aiohttp==3.9.5
+python-dotenv==1.0.1
