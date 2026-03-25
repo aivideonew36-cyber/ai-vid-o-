@@ -1,0 +1,6 @@
+# Secrets - Ne jamais commiter
+terraform.tfvars
+*.tfstate
+*.tfstate.backup
+.terraform/
+.terraform.lock.hcl
