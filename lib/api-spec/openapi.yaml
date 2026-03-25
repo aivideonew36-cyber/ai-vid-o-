@@ -1,0 +1,360 @@
+openapi: 3.1.0
+info:
+  title: Api
+  version: 0.1.0
+  description: PIReel - API de génération vidéo IA 4K
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: jobs
+    description: Video generation job management
+  - name: pipeline
+    description: Pipeline tools and checkpoint status
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /jobs:
+    get:
+      operationId: listJobs
+      tags: [jobs]
+      summary: List all video generation jobs
+      responses:
+        "200":
+          description: List of jobs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/VideoJob"
+    post:
+      operationId: createJob
+      tags: [jobs]
+      summary: Submit a new video generation job
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateJobRequest"
+      responses:
+        "201":
+          description: Job created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VideoJob"
+
+  /jobs/{id}:
+    get:
+      operationId: getJob
+      tags: [jobs]
+      summary: Get a specific job by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Job details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VideoJob"
+        "404":
+          description: Job not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteJob
+      tags: [jobs]
+      summary: Delete a job
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Job deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /pipeline/status:
+    get:
+      operationId: getPipelineStatus
+      tags: [pipeline]
+      summary: Get pipeline tools and checkpoint status
+      responses:
+        "200":
+          description: Pipeline status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PipelineStatus"
+
+  /pipeline/checkpoints:
+    get:
+      operationId: getCheckpoints
+      tags: [pipeline]
+      summary: Get the 2000 checkpoint layers status
+      responses:
+        "200":
+          description: Checkpoint layers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CheckpointLayer"
+
+  /pipeline/tools:
+    get:
+      operationId: getTools
+      tags: [pipeline]
+      summary: Get the 20 server tools status
+      responses:
+        "200":
+          description: Server tools list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ServerTool"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+      required:
+        - error
+        - message
+
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+      required:
+        - success
+        - message
+
+    CreateJobRequest:
+      type: object
+      properties:
+        prompt:
+          type: string
+          description: Text description of the video to generate
+        duration:
+          type: integer
+          description: Video duration in seconds (default 30)
+          default: 30
+        resolution:
+          type: string
+          enum: [1080p, 4K]
+          default: 4K
+        voiceText:
+          type: string
+          description: Text for voice synthesis (optional)
+        voiceClone:
+          type: boolean
+          description: Enable voice cloning
+          default: false
+        environment:
+          type: string
+          description: Background environment (office, outdoor, studio)
+          default: studio
+        hairType:
+          type: string
+          description: Hair type (straight, curly, braids, etc.)
+        ethnicBackground:
+          type: string
+          description: Character ethnic background for diversity
+      required:
+        - prompt
+
+    VideoJob:
+      type: object
+      properties:
+        id:
+          type: string
+        prompt:
+          type: string
+        status:
+          type: string
+          enum: [queued, processing, completed, failed]
+        progress:
+          type: integer
+          description: Progress percentage 0-100
+        currentLayer:
+          type: integer
+          description: Current checkpoint layer being processed (0-2000)
+        duration:
+          type: integer
+        resolution:
+          type: string
+        videoUrl:
+          type: string
+          nullable: true
+        estimatedTime:
+          type: integer
+          description: Estimated remaining time in seconds
+        computeTime:
+          type: integer
+          description: Actual compute time in seconds
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        errorMessage:
+          type: string
+          nullable: true
+        environment:
+          type: string
+        hairType:
+          type: string
+          nullable: true
+        voiceText:
+          type: string
+          nullable: true
+      required:
+        - id
+        - prompt
+        - status
+        - progress
+        - currentLayer
+        - duration
+        - resolution
+        - createdAt
+        - updatedAt
+
+    PipelineStatus:
+      type: object
+      properties:
+        isReady:
+          type: boolean
+        gpuModel:
+          type: string
+        vramTotal:
+          type: integer
+          description: Total VRAM in GB
+        vramUsed:
+          type: integer
+          description: Used VRAM in GB
+        checkpointsLoaded:
+          type: integer
+          description: Number of checkpoints loaded (max 2000)
+        activeJobs:
+          type: integer
+        tensorrtEnabled:
+          type: boolean
+        computeRatio:
+          type: string
+          description: Compute ratio (e.g. 2:1 = 60s compute for 30s video)
+        cloudProvider:
+          type: string
+        instanceType:
+          type: string
+      required:
+        - isReady
+        - gpuModel
+        - vramTotal
+        - vramUsed
+        - checkpointsLoaded
+        - activeJobs
+        - tensorrtEnabled
+        - computeRatio
+        - cloudProvider
+        - instanceType
+
+    CheckpointLayer:
+      type: object
+      properties:
+        rangeStart:
+          type: integer
+        rangeEnd:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+          enum: [structure, facial, skin, hair, mouth, expressions, clothing, lighting, environment, text_adherence, diversity, temporal, motion, colorimetry, upscaling, realism, finalization]
+        loaded:
+          type: boolean
+      required:
+        - rangeStart
+        - rangeEnd
+        - name
+        - description
+        - category
+        - loaded
+
+    ServerTool:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+        version:
+          type: string
+        status:
+          type: string
+          enum: [active, loading, error, inactive]
+        isCore:
+          type: boolean
+          description: Whether this is a critical pipeline component
+      required:
+        - id
+        - name
+        - description
+        - category
+        - version
+        - status
+        - isCore
