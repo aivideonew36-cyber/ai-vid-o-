@@ -1,0 +1,41 @@
+import { CheckpointLayerCategory } from "@workspace/api-client-react";
+
+export const CATEGORY_COLORS: Record<string, string> = {
+  [CheckpointLayerCategory.structure]: "bg-slate-500",
+  [CheckpointLayerCategory.facial]: "bg-blue-500",
+  [CheckpointLayerCategory.skin]: "bg-rose-400",
+  [CheckpointLayerCategory.hair]: "bg-amber-600",
+  [CheckpointLayerCategory.mouth]: "bg-red-500",
+  [CheckpointLayerCategory.expressions]: "bg-orange-500",
+  [CheckpointLayerCategory.clothing]: "bg-indigo-500",
+  [CheckpointLayerCategory.lighting]: "bg-yellow-400",
+  [CheckpointLayerCategory.environment]: "bg-emerald-500",
+  [CheckpointLayerCategory.text_adherence]: "bg-cyan-500",
+  [CheckpointLayerCategory.diversity]: "bg-purple-500",
+  [CheckpointLayerCategory.temporal]: "bg-fuchsia-500",
+  [CheckpointLayerCategory.motion]: "bg-pink-500",
+  [CheckpointLayerCategory.colorimetry]: "bg-violet-500",
+  [CheckpointLayerCategory.upscaling]: "bg-sky-400",
+  [CheckpointLayerCategory.realism]: "bg-teal-400",
+  [CheckpointLayerCategory.finalization]: "bg-green-500",
+};
+
+export const CATEGORY_RANGES = [
+  { id: CheckpointLayerCategory.structure, name: "Structure", start: 1, end: 50 },
+  { id: CheckpointLayerCategory.facial, name: "Facial Geometry", start: 51, end: 150 },
+  { id: CheckpointLayerCategory.skin, name: "Skin Micro-Textures", start: 151, end: 250 },
+  { id: CheckpointLayerCategory.hair, name: "Hair System", start: 251, end: 350 },
+  { id: CheckpointLayerCategory.mouth, name: "Mouth Mechanics", start: 351, end: 450 },
+  { id: CheckpointLayerCategory.expressions, name: "Expressions", start: 451, end: 550 },
+  { id: CheckpointLayerCategory.clothing, name: "Clothing Physics", start: 551, end: 650 },
+  { id: CheckpointLayerCategory.lighting, name: "Studio Lighting", start: 651, end: 750 },
+  { id: CheckpointLayerCategory.environment, name: "3D Environments", start: 751, end: 900 },
+  { id: CheckpointLayerCategory.text_adherence, name: "Prompt Adherence", start: 901, end: 1050 },
+  { id: CheckpointLayerCategory.diversity, name: "Global Diversity", start: 1051, end: 1200 },
+  { id: CheckpointLayerCategory.temporal, name: "Temporal Coherence", start: 1201, end: 1350 },
+  { id: CheckpointLayerCategory.motion, name: "Motion Stability", start: 1351, end: 1500 },
+  { id: CheckpointLayerCategory.colorimetry, name: "Colorimetry", start: 1501, end: 1650 },
+  { id: CheckpointLayerCategory.upscaling, name: "Upscaling (4K)", start: 1651, end: 1800 },
+  { id: CheckpointLayerCategory.realism, name: "Realism Filters", start: 1801, end: 1950 },
+  { id: CheckpointLayerCategory.finalization, name: "Finalization", start: 1951, end: 2000 },
+];
