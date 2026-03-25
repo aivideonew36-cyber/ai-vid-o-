@@ -1,0 +1,10 @@
+# Copiez ce fichier en terraform.tfvars et remplissez les valeurs
+# ATTENTION : Ne jamais commiter terraform.tfvars sur GitHub
+
+project_id   = "votre-projet-gcp"
+region       = "us-central1"
+zone         = "us-central1-a"
+github_token = "ghp_votre_token_github"
+github_repo  = "https://github.com/aivideonew36-cyber/ai-vid-o-"
+supabase_url = "https://votre-projet.supabase.co"
+supabase_key = "votre-cle-supabase"
